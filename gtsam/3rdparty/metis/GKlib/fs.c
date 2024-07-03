@@ -206,10 +206,15 @@ char *getpathname(char *path)
 **************************************************************************/
 int gk_mkpath(char *pathname)
 {
+#if __APPLE__
+  return 1;
+#else
   char tmp[2048];
 
   sprintf(tmp, "mkdir -p %s", pathname);
+
   return system(tmp);
+#endif
 }
 
 
@@ -218,8 +223,12 @@ int gk_mkpath(char *pathname)
 **************************************************************************/
 int gk_rmpath(char *pathname)
 {
+#if __APPLE__
+  return 1;
+#else
   char tmp[2048];
 
   sprintf(tmp, "rm -r %s", pathname);
   return system(tmp);
+#endif
 }

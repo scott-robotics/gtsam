@@ -962,11 +962,17 @@ namespace gtsam {
                                bool showZero) const {
     std::ofstream os((name + ".dot").c_str());
     dot(os, labelFormatter, valueFormatter, showZero);
+
+#if __APPLE__
+    int result = -1;
+#else
     int result =
         system(("dot -Tpdf " + name + ".dot -o " + name + ".pdf >& /dev/null")
                    .c_str());
+#endif
     if (result == -1)
       throw std::runtime_error("DecisionTree::dot system call failed");
+
   }
 
   template <typename L, typename Y>

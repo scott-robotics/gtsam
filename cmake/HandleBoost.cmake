@@ -28,10 +28,18 @@ set(BOOST_FIND_MINIMUM_COMPONENTS serialization system filesystem thread program
 find_package(Boost ${BOOST_FIND_MINIMUM_VERSION} COMPONENTS ${BOOST_FIND_MINIMUM_COMPONENTS})
 
 # Required components
-if(NOT Boost_SERIALIZATION_LIBRARY OR NOT Boost_SYSTEM_LIBRARY OR NOT Boost_FILESYSTEM_LIBRARY OR
-    NOT Boost_THREAD_LIBRARY OR NOT Boost_DATE_TIME_LIBRARY)
-  message(FATAL_ERROR "Missing required Boost components >= v1.65, please install/upgrade Boost or configure your search paths.")
-endif()
+# if(NOT Boost_SERIALIZATION_LIBRARY OR NOT Boost_SYSTEM_LIBRARY OR NOT Boost_FILESYSTEM_LIBRARY OR
+#     NOT Boost_THREAD_LIBRARY OR NOT Boost_DATE_TIME_LIBRARY)
+#   message(STATUS "Boost:: ${Boost_FOUND}")
+#   message(STATUS "Boost::Includes ${Boost_INCLUDE_DIRS}")
+#   message(STATUS "Boost::Libraries: ${Boost_LIBRARIES}")
+#   message(STATUS "Boost::serialization: ${Boost_SERIALIZATION_LIBRARY}")
+#   message(STATUS "Boost::system: ${Boost_SYSTEM_LIBRARY}")
+#   message(STATUS "Boost::filesystem: ${Boost_FILESYSTEM_LIBRARY}")
+#   message(STATUS "Boost::thread: ${Boost_THREAD_LIBRARY}")
+#   message(STATUS "Boost::date_time: ${Boost_DATE_TIME_LIBRARY}")
+#   message(FATAL_ERROR "Missing required Boost components >= v1.65, please install/upgrade Boost or configure your search paths.")
+# endif()
 
 option(GTSAM_DISABLE_NEW_TIMERS "Disables using Boost.chrono for timing" OFF)
 # Allow for not using the timer libraries on boost < 1.48 (GTSAM timing code falls back to old timer library)
@@ -47,7 +55,7 @@ if (GTSAM_DISABLE_NEW_TIMERS)
     message("WARNING:  GTSAM timing instrumentation manually disabled")
     list_append_cache(GTSAM_COMPILE_DEFINITIONS_PUBLIC DGTSAM_DISABLE_NEW_TIMERS)
 else()
-    if(Boost_TIMER_LIBRARY)
+    if(TARGET Boost::timer)
       list(APPEND GTSAM_BOOST_LIBRARIES Boost::timer Boost::chrono)
     else()
       list(APPEND GTSAM_BOOST_LIBRARIES rt) # When using the header-only boost timer library, need -lrt
