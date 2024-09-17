@@ -25,7 +25,12 @@ endif()
 set(BOOST_FIND_MINIMUM_VERSION 1.65)
 set(BOOST_FIND_MINIMUM_COMPONENTS serialization system filesystem thread program_options date_time timer chrono regex)
 
+if (${CMAKE_VERSION} VERSION_LESS "3.30.0")
 find_package(Boost ${BOOST_FIND_MINIMUM_VERSION} COMPONENTS ${BOOST_FIND_MINIMUM_COMPONENTS} REQUIRED)
+else()
+# See `cmake --help-policy CMP0167`
+find_package(Boost CONFIG ${BOOST_FIND_MINIMUM_VERSION} COMPONENTS ${BOOST_FIND_MINIMUM_COMPONENTS} REQUIRED)
+endif()
 
 # Required components
 if(NOT Boost_SERIALIZATION_LIBRARY OR NOT Boost_SYSTEM_LIBRARY OR NOT Boost_FILESYSTEM_LIBRARY OR
